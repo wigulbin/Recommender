@@ -50,4 +50,16 @@ public class SpotifyClient {
         return new Track(dataJson);
     }
     public List<Track> findTracks() { return null;}
+
+
+    public Map<String, Object> searchApi(String query) throws IOException, InterruptedException, URISyntaxException{
+        //TODO URL Encode query
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/search?q=" + query + "&type=album,track,artist")).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, Object> dataJson = objectMapper.readValue(postResponse.body(), new TypeReference<HashMap<String, Object>>() {});
+        return dataJson;
+    }
 }

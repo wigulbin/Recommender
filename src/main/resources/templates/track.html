@@ -5,9 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="${track.id}" />
+<p th:text="|Track ID: ${track.id}|" />
 <p th:text="${track.name}" />
 <p th:text="${track.popularity}" />
-<p th:text="|${track.getPreviewUrl()}!|" />
+<p th:text="${track.getPreviewUrl()}" />
 </body>
 </html>

@@ -1,0 +1,95 @@
+:root{
+    --main-color: hsl(31 12% 12% / 1);
+    --second-color: hsl(31 12% 88% / 1);
+}
+
+
+html{
+    font-family: Lato, "Roboto Light", serif;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--main-color);
+    color: var(--second-color);
+}
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0;
+}
+div{
+
+}
+
+div.flexAlign{
+    display: flex;
+    align-items: center;
+}
+
+span.flexAlign{
+    display: inline-flex;
+    align-items: center;
+}
+
+#header{
+    padding:5pt;
+    margin-bottom:5pt;
+}
+#main{
+    flex-grow: 7;
+}
+#footer{
+    padding:5pt;
+}
+
+#searchBar{
+    height: 25pt;
+    width: 50vw;
+    border-radius: 25pt;
+    background-color: var(--second-color);
+    padding: 5pt 7pt;
+}
+
+#searchBar>input{
+    border:0;
+    border-radius:10pt;
+    height:99%;
+    width:90%;
+    padding:0 5pt;
+    font-size: 16pt;
+    background-color: var(--second-color);
+}
+
+#searchBar>input:focus-visible{
+    outline:0;
+}
+
+#logoText{
+    font-size:30pt;
+    letter-spacing: 3pt;
+    font-weight: 700;
+}
+
+#logo{
+
+}
+
+.flexCenter{
+    display: flex;
+    justify-content: center;
+}
+
+#loginButton{
+    border: 0;
+    color:hsl(31 12% 88% / 1);
+    padding: 7.5pt 15pt;
+    border-radius: 5pt;
+    font-weight: bold;
+    background-color: #AD5D4E;
+    font-size: 13pt;
+    background-image: url("http://localhost:8080/icons/spotify.svg");
+    background-repeat: no-repeat;
+    background-position: 5pt center;
+    padding-left:30pt;
+}

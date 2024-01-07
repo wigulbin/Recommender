@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div th:insert="header"></div>
+
+<div id="main" class="flexCenter">
+    <div>
+        <div id="searchBar" class="flexAlign">
+            <img src="icons/search.svg" width="32px" alt="">
+            <input  type="text" name="search" onchange="search(this.value)">
+        </div>
+
+        <div id="searchResults" style="margin-top:50pt;text-align: center">
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="footer">"</div>
+</body>
+</html>
