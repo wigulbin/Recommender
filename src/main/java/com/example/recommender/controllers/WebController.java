@@ -48,4 +48,12 @@ public class WebController {
         model.addAttribute("query", query);
         return "results";
     }
+
+    @GetMapping("album")
+    public String getAlbum(@RequestParam(name="albumid", defaultValue = "") String albumid, Model model){
+        SpotifyClient client - new SpotifyClient();
+
+    }
+
+
 }

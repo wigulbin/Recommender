@@ -27,16 +27,6 @@ public class Track {
         if (var3 instanceof String previewString) {
             this.previewUrl = previewString;
         }
-
-    }
-
-    public static Track findTrack(String trackID, AccessToken ourToken) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/tracks/" + trackID)).header("Authorization", "Bearer " + ourToken.getAccessToken()).GET().build();
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> dataJson = objectMapper.readValue(postResponse.body(), new TypeReference<HashMap<String, Object>>() {});
-        return new Track(dataJson);
     }
 
     public String getId() {
