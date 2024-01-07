@@ -5,7 +5,7 @@ public class Album {
     String name = "";
 
     public Album() {
-
+        this.id =
     }
 
     public String getId() {

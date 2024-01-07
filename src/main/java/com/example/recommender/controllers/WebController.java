@@ -51,7 +51,7 @@ public class WebController {
 
     @GetMapping("album")
     public String getAlbum(@RequestParam(name="albumid", defaultValue = "") String albumid, Model model){
-        SpotifyClient client - new SpotifyClient();
+        SpotifyClient client = new SpotifyClient();
 
     }
 

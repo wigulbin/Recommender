@@ -62,4 +62,8 @@ public class SpotifyClient {
         Map<String, Object> dataJson = objectMapper.readValue(postResponse.body(), new TypeReference<HashMap<String, Object>>() {});
         return dataJson;
     }
+
+    public Album findAlbum(String albumID) throws IOException, InterruptedException, URISyntaxException{
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/albums/" + albumID)).header()
+    }
 }
