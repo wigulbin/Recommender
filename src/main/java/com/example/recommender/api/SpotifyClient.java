@@ -1,6 +1,7 @@
 package com.example.recommender.api;
 
 import com.example.recommender.beans.Track;
+import com.example.recommender.beans.Artist;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,6 +52,16 @@ public class SpotifyClient {
     }
     public List<Track> findTracks() { return null;}
 
+    public Artist findArtist(String artistID) throws IOException, InterruptedException, URISyntaxException {
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/artists/" + artistID)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> dataJson = objectMapper.readValue(postResponse.body(), new TypeReference<HashMap<String, Object>>() {});
+
+        return new Artist(dataJson);
+    }
+    public List<Artist> findArtist() { return null;}
 
     public Map<String, Object> searchApi(String query) throws IOException, InterruptedException, URISyntaxException{
         //TODO URL Encode query
@@ -64,6 +75,6 @@ public class SpotifyClient {
     }
 
     public Album findAlbum(String albumID) throws IOException, InterruptedException, URISyntaxException{
-        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/albums/" + albumID)).header()
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/albums/" + albumID)).header();
     }
 }

@@ -55,5 +55,14 @@ public class WebController {
 
     }
 
+    @GetMapping("/artist")
+    public String getArtist(@RequestParam(name="artistid", required=false, defaultValue="") String artistid, Model model) throws IOException, URISyntaxException, InterruptedException {
+        SpotifyClient client = new SpotifyClient();
+        Artist artist = client.findArtist(artistid);
+
+        model.addAttribute("artist", artist);
+        return "artist";
+    }
+
 
 }
