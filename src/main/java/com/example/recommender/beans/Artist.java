@@ -13,7 +13,7 @@ public class Artist {
         this.id = dataMap.getOrDefault("id", "").toString();
         this.name = dataMap.getOrDefault("name", "").toString();
         this.popularity = Integer.parseInt(dataMap.getOrDefault("popularity", "0").toString());
-        Object var3 = dataMap.get("preview_url");
+        Object var3 = dataMap.get("genres");
     }
 
     public String getId() {
@@ -28,7 +28,7 @@ public class Artist {
         return this.popularity;
     }
 
-    public String getPreviewUrl() {
+    public Object getGenres() {
         return this.genres;
     }
 }

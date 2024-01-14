@@ -1,6 +1,7 @@
 package com.example.recommender.controllers;
 
 import com.example.recommender.api.SpotifyClient;
+import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Track;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,10 +50,13 @@ public class WebController {
         return "results";
     }
 
-    @GetMapping("album")
-    public String getAlbum(@RequestParam(name="albumid", defaultValue = "") String albumid, Model model){
+    @GetMapping("/album")
+    public String getAlbum(@RequestParam(name="albumid", defaultValue = "") String albumid, Model model) throws IOException, URISyntaxException, InterruptedException {
         SpotifyClient client = new SpotifyClient();
+        Album album = client.findAlbum(albumid);
 
+        model.addAttribute("album", album);
+        return "album";
     }
 
 
