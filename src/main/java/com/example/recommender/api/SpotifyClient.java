@@ -9,9 +9,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ public class SpotifyClient {
 
     private static String clientid = "";
     private static String clientSecret = "";
+    private static final String REDIRECT_URL = "http://localhost:8080/callback";
 
     static {
         try {
@@ -36,9 +39,9 @@ public class SpotifyClient {
         catch (Exception e){}
     }
 
-     public SpotifyClient()
+     public SpotifyClient(String code)
      {
-
+         this.token = AccessToken.createToken(code);
      }
 
 
@@ -88,4 +91,23 @@ public class SpotifyClient {
 
         return new Album(dataJson);
     }
+
+    public static String getClientid() {
+        return clientid;
+    }
+
+    protected static String getClientSecret() {
+        return clientSecret;
+    }
+
+    public static String getRedirectURL()
+    {
+        return REDIRECT_URL;
+    }
+
+    public static String getEncodedRedirectURL()
+    {
+        return URLEncoder.encode(REDIRECT_URL, StandardCharsets.UTF_8);
+    }
+
 }
