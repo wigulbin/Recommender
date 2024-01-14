@@ -2,6 +2,7 @@ package com.example.recommender.controllers;
 
 import com.example.recommender.api.SpotifyClient;
 import com.example.recommender.beans.Album;
+import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
