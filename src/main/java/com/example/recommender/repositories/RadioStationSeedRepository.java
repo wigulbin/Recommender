@@ -4,7 +4,7 @@ import com.example.recommender.beans.RadioStationSeed;
 import com.example.recommender.beans.User;
 import org.springframework.data.repository.CrudRepository;
 
-public interface RadioStationSeedRepository extends CrudRepository<User, Long> {
+public interface RadioStationSeedRepository extends CrudRepository<RadioStationSeed, Long> {
 
     RadioStationSeed findById(long id);
 }
