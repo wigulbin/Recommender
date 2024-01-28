@@ -1,6 +1,6 @@
 package com.example.recommender.repositories;
 
-import com.example.recommender.api.User;
+import com.example.recommender.beans.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

@@ -1,8 +1,7 @@
 package com.example.recommender.controllers;
 
-import com.example.recommender.api.AccessToken;
 import com.example.recommender.api.SpotifyClient;
-import com.example.recommender.api.User;
+import com.example.recommender.beans.User;
 import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
@@ -20,9 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
