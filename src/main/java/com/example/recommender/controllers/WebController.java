@@ -2,9 +2,12 @@ package com.example.recommender.controllers;
 
 import com.example.recommender.api.AccessToken;
 import com.example.recommender.api.SpotifyClient;
+import com.example.recommender.api.User;
 import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
+import com.example.recommender.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -26,6 +29,10 @@ import java.util.Map;
 @SessionAttributes({"client"})
 @Controller
 public class WebController {
+
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/")
     public String landingPage(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
         model.addAttribute("name", name);
@@ -108,6 +115,15 @@ public class WebController {
 
         model.addAttribute("artist", artist);
         return "artist";
+    }
+
+    @GetMapping("/testUser")
+    public String testUser(@RequestParam(name="artistid", required=false, defaultValue="") String artistid, Model model) throws IOException, URISyntaxException, InterruptedException {
+        User user = new User("test", "user");
+        userRepository.save(user);
+
+        model.addAttribute("user", user);
+        return "user";
     }
 
 
