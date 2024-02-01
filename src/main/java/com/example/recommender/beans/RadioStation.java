@@ -13,7 +13,7 @@ public class RadioStation {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="userEntity", referencedColumnName = "id")
+    @JoinColumn(name="USER_ENTITY", referencedColumnName = "id")
     private User userEntity;
     private String role = "";
     private LocalDateTime createdAt;
