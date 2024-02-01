@@ -13,8 +13,8 @@ public class RadioStation {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="userid", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name="userEntity", referencedColumnName = "id")
+    private User userEntity;
     private String role = "";
     private LocalDateTime createdAt;
 
@@ -35,12 +35,12 @@ public class RadioStation {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getUserEntity() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEntity(User userEntity) {
+        this.userEntity = userEntity;
     }
 
     public String getRole() {
