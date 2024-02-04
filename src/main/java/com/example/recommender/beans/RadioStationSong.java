@@ -3,12 +3,13 @@ package com.example.recommender.beans;
 import jakarta.persistence.*;
 
 @Entity(name="RADIO_STATION_SONGS")
+@IdClass(RadioStationSongKey.class)
 public class RadioStationSong {
     @Id
     private long trackId;
-
+    @Id
     @ManyToOne
-    @JoinColumn(name="radioStationId", referencedColumnName = "id")
+    @JoinColumn(name="RADIO_STATION_ID", referencedColumnName = "id")
     private RadioStation radioStation;
 
     private boolean skipped;
