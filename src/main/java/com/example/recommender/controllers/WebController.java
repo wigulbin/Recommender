@@ -39,17 +39,17 @@ public class WebController {
     public RedirectView loginWithSpotify(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
         List<String> scopeList = List.of("app-remote-control", "streaming", "playlist-read-private", "playlist-read-collaborative", "user-read-playback-position", "user-top-read", "user-read-recently-played", "user-library-read", "user-read-email");
         String scopes = String.join(" ", scopeList);
-        String state = "129030983124089u";
+        String state = "129030983124089u";  // this will be a random string that we generate and store. we then send it to spotify with the request and make sure that it matches when spotify sends us a request back
         String encodedRedirect = SpotifyClient.getEncodedRedirectURL();
         String authURL = String.format("https://accounts.spotify.com/authorize?response_type=%s&client_id=%s&scope=%s&redirect_uri=%s&state=%s&show_dialog=%s", "code", SpotifyClient.getClientid(), scopes, encodedRedirect, state, "true");
 
-        return new RedirectView(authURL);
+        return new RedirectView(authURL);  // we redirect the user to the spotify login screen with the state, scopes, etc.
     }
 
     @GetMapping("/callback")
-    public ModelAndView callback(@RequestParam(name="code", required=false, defaultValue="") String code,
-                                 @RequestParam(name="state", required=false, defaultValue="") String state,
-                                 @RequestParam(name="error", required=false, defaultValue="") String error,
+    public ModelAndView callback(@RequestParam(name="code", required=false, defaultValue="") String code,  // code passed back from spotify
+                                 @RequestParam(name="state", required=false, defaultValue="") String state,  // when this comes back from spotify it should match the state that we created and saved earlier
+                                 @RequestParam(name="error", required=false, defaultValue="") String error,  // if we get any errors
                                  ModelMap model) {
         System.out.println("Code = " + code);
         System.out.println("State = " + state);
@@ -122,5 +122,14 @@ public class WebController {
         return "user";
     }
 
+    @GetMapping("/test")
+    public String getInfo() {
+        return "indexTest";
+    }
 
+    @PostMapping("/testSubmit")
+    public RedirectView postInfo(@RequestParam(name = "OurInput", required = false, defaultValue = "") String ourInput) {
+        return new RedirectView("/test?input=" + ourInput);
+    }
 }
+

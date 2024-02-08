@@ -2,17 +2,17 @@ package com.example.recommender.beans;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity(name="APPLICATION_USERS")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "USER_SEQ")
-    @SequenceGenerator(sequenceName = "user_seq", allocationSize = 1, name = "USER_SEQ")
-    private Long id;
-    private String firstName;
-    private String lastName;
+    private String id;
+    private String userName = "";
+    private String product = "";
+    private String imageUrl = "";
+    private int imageHeight;
+    private int imageWidth;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RadioStation> radioStations;
@@ -44,17 +44,9 @@ public class User {
         return lastName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getUserName() {return userName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public void setUserName(String user_name) {this.userName = user_name;}
 
     public List<RadioStation> getRadioStations() {
         return radioStations;

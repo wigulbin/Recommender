@@ -1,6 +1,7 @@
 package com.example.recommender.api;
 
 import com.example.recommender.beans.Album;
+import com.example.recommender.beans.SpotifyProfile;
 import com.example.recommender.beans.Track;
 import com.example.recommender.beans.Artist;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -90,6 +91,19 @@ public class SpotifyClient {
         Map<String, Object> dataJson = objectMapper.readValue(postResponse.body(), new TypeReference<Map<String, Object>>() {});
 
         return new Album(dataJson);
+    }
+
+    public SpotifyProfile findProfile() throws IOException, InterruptedException, URISyntaxException {
+        HttpRequest postRequest = HttpRequest.newBuilder()
+                .uri(new URI("https://api.spotify.com/v1/me"))
+                .header("Authorization", "Bearer " + token.getAccessToken())
+                .GET()
+                .build();
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+
+
+        return new SpotifyProfile();
     }
 
     public static String getClientid() {
