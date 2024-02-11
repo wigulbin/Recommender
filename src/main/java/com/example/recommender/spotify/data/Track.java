@@ -63,6 +63,10 @@ public class Track{
         return name + ", " + album.getName() + " by " + artists.stream().map(Artist::getName).collect(Collectors.joining(", "));
     }
 
+    public String getArtistNames(){
+        return artists.stream().map(Artist::getName).collect(Collectors.joining(", "));
+    }
+
     public Album getAlbum() {
         return album;
     }

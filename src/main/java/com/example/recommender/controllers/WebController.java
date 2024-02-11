@@ -88,7 +88,7 @@ public class WebController {
 
     @PostMapping("/search")
     public String postSearch(@RequestParam(name="query", required=true, defaultValue="") String query,
-                             @RequestParam(name="query", required=true, defaultValue="") String types,
+                             @RequestParam(name="types", required=true, defaultValue="") String types,
                              Model model) throws IOException, URISyntaxException, InterruptedException {
         SpotifyClient client = (SpotifyClient)model.getAttribute("client");
 

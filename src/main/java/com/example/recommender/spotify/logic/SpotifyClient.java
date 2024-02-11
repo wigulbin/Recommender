@@ -77,7 +77,7 @@ public class SpotifyClient {
 
     public SearchResult searchApi(String query, String typeString) throws IOException, InterruptedException, URISyntaxException{
         //TODO URL Encode query
-        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/search?q=" + query + "&type=" + typeString)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/search?q=" + URLEncoder.encode(query) + "&type=" + typeString)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
