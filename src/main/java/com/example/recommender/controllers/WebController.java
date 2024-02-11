@@ -1,11 +1,13 @@
 package com.example.recommender.controllers;
 
-import com.example.recommender.api.SpotifyClient;
-import com.example.recommender.beans.User;
+import com.example.recommender.spotify.data.SearchResult;
+import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
-import com.example.recommender.repositories.UserRepository;
+//import com.example.recommender.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +27,10 @@ import java.util.Map;
 @SessionAttributes({"client"})
 @Controller
 public class WebController {
+    private static final Logger log = LoggerFactory.getLogger(WebController.class);
 
-    @Autowired
-    UserRepository userRepository;
+//    @Autowired
+//    UserRepository userRepository;
 
     @GetMapping("/")
     public String landingPage(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -41,12 +44,14 @@ public class WebController {
         String scopes = String.join(" ", scopeList);
         String state = "129030983124089u";  // this will be a random string that we generate and store. we then send it to spotify with the request and make sure that it matches when spotify sends us a request back
         String encodedRedirect = SpotifyClient.getEncodedRedirectURL();
+
         String authURL = String.format("https://accounts.spotify.com/authorize?response_type=%s&client_id=%s&scope=%s&redirect_uri=%s&state=%s&show_dialog=%s", "code", SpotifyClient.getClientid(), scopes, encodedRedirect, state, "true");
 
         return new RedirectView(authURL);  // we redirect the user to the spotify login screen with the state, scopes, etc.
     }
 
     @GetMapping("/callback")
+
     public ModelAndView callback(@RequestParam(name="code", required=false, defaultValue="") String code,  // code passed back from spotify
                                  @RequestParam(name="state", required=false, defaultValue="") String state,  // when this comes back from spotify it should match the state that we created and saved earlier
                                  @RequestParam(name="error", required=false, defaultValue="") String error,  // if we get any errors
@@ -77,7 +82,6 @@ public class WebController {
 
     @GetMapping("/search")
     public String getSearch(@RequestParam(name="trackid", required=false, defaultValue="") String trackid, Model model) throws IOException, URISyntaxException, InterruptedException {
-        SpotifyClient client = (SpotifyClient)model.getAttribute("client");
 
         return "search";
     }
@@ -88,7 +92,7 @@ public class WebController {
                              Model model) throws IOException, URISyntaxException, InterruptedException {
         SpotifyClient client = (SpotifyClient)model.getAttribute("client");
 
-        Map<String, Object> results = client.searchApi(query);
+        SearchResult results = client.searchApiForTrack(query);
 
         model.addAttribute("results", results);
         model.addAttribute("query", query);
@@ -111,15 +115,6 @@ public class WebController {
 
         model.addAttribute("artist", artist);
         return "artist";
-    }
-
-    @GetMapping("/testUser")
-    public String testUser(@RequestParam(name="artistid", required=false, defaultValue="") String artistid, Model model) throws IOException, URISyntaxException, InterruptedException {
-        User user = new User("test", "user");
-        userRepository.save(user);
-
-        model.addAttribute("user", user);
-        return "user";
     }
 
     @GetMapping("/test")

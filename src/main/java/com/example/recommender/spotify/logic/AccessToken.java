@@ -1,4 +1,4 @@
-package com.example.recommender.api;
+package com.example.recommender.spotify.logic;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,9 +1,11 @@
-package com.example.recommender.api;
+package com.example.recommender.spotify.logic;
 
+import com.example.recommender.api.Common;
 import com.example.recommender.beans.Album;
 import com.example.recommender.beans.SpotifyProfile;
 import com.example.recommender.beans.Track;
 import com.example.recommender.beans.Artist;
+import com.example.recommender.spotify.data.SearchResult;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -68,15 +70,19 @@ public class SpotifyClient {
     }
     public List<Artist> findArtist() { return null;}
 
-    public Map<String, Object> searchApi(String query) throws IOException, InterruptedException, URISyntaxException{
+    public SearchResult searchApiForTrack(String query) throws IOException, InterruptedException, URISyntaxException{
         //TODO URL Encode query
-        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/search?q=" + query + "&type=album,track,artist")).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
+        return searchApi(query, "track");
+    }
+
+    public SearchResult searchApi(String query, String typeString) throws IOException, InterruptedException, URISyntaxException{
+        //TODO URL Encode query
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/search?q=" + query + "&type=" + typeString)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, Object> dataJson = objectMapper.readValue(postResponse.body(), new TypeReference<HashMap<String, Object>>() {});
-        return dataJson;
+        return objectMapper.readValue(postResponse.body(), SearchResult.class);
     }
 
     public Album findAlbum(String albumID) throws IOException, InterruptedException, URISyntaxException{
