@@ -125,6 +125,18 @@ h4{
     font-weight: bold;
 }
 
+.selectableRow{
+    cursor: pointer;
+}
+
+.selectableRow td{
+    padding: 5pt 0;
+}
+
+.selectableRow:hover{
+    filter:brightness(60%);
+}
+
 #loginButton{
     border: 0;
     color:hsl(31 12% 88% / 1);

@@ -1,5 +1,8 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="js/results.js"></script>
+</head>
 <div th:text="|Results for query: ${query}|"/>
 
 <div class="container">
@@ -10,7 +13,7 @@
             <td>Album</td>
             <td>Artist</td>
         </tr>
-        <tr th:each="track, iStat: ${results.getTracks().getItems()}">
+        <tr class="selectableRow" th:id="${track.getId()}" th:each="track, iStat: ${results.getTracks().getItems()}">
             <td th:text="|${iStat.count}.|"/>
             <td th:text="${track.getName()}"/>
             <td th:text="${track.getAlbum().getName()}"/>
