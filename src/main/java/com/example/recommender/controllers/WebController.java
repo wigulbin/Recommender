@@ -1,5 +1,6 @@
 package com.example.recommender.controllers;
 
+import com.example.recommender.repositories.UserRepository;
 import com.example.recommender.spotify.data.SearchResult;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
@@ -27,10 +28,9 @@ import java.util.Map;
 @SessionAttributes({"client"})
 @Controller
 public class WebController {
-    private static final Logger log = LoggerFactory.getLogger(WebController.class);
 
-//    @Autowired
-//    UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/")
     public String landingPage(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
