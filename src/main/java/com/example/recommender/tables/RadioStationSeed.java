@@ -10,7 +10,7 @@ public class RadioStationSeed {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="radioStationId", referencedColumnName = "id")
+    @JoinColumn(name="RADIO_STATION_ID", referencedColumnName = "id")
     private RadioStation radioStation;
 
     private String detailType = "";
