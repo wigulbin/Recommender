@@ -107,9 +107,10 @@ public class SpotifyClient {
                 .build();
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        ObjectMapper objectMapper = new ObjectMapper();
 
 
-        return new SpotifyProfile();
+        return objectMapper.readValue(postResponse.body(), SpotifyProfile.class);
     }
 
     public static String getClientid() {

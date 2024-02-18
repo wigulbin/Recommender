@@ -1,5 +1,8 @@
 package com.example.recommender.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties
 public class SpotifyProfile {
 
     private String id;

@@ -1,6 +1,5 @@
 package com.example.recommender.controllers;
 
-import com.example.recommender.repositories.UserRepository;
 import com.example.recommender.spotify.data.SearchResult;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
@@ -28,9 +27,10 @@ import java.util.Map;
 @SessionAttributes({"client"})
 @Controller
 public class WebController {
+    private static final Logger log = LoggerFactory.getLogger(WebController.class);
 
-    @Autowired
-    UserRepository userRepository;
+//    @Autowired
+//    UserRepository userRepository;
 
     @GetMapping("/")
     public String landingPage(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -62,8 +62,17 @@ public class WebController {
         SpotifyClient client = new SpotifyClient(code);
         model.addAttribute("client", client);
 
-        return new ModelAndView("redirect:/search", model);
+        return new ModelAndView("redirect:/getProfile", model);
     }
+
+    @GetMapping("/getProfile")
+    public RedirectView getProfile(Model model) throws IOException, URISyntaxException, InterruptedException {
+        if(model.getAttribute("client") instanceof SpotifyClient client) {
+            client.findProfile();
+        }
+        return new RedirectView("/search");
+    }
+
 
     @GetMapping("/index")
     public String index(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
