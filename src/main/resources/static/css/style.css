@@ -18,6 +18,8 @@ body{
     justify-content: space-between;
     height: 100%;
     margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 div{
 
@@ -31,6 +33,10 @@ div.flexAlign{
 span.flexAlign{
     display: inline-flex;
     align-items: center;
+}
+
+.horizontalCenter{
+    text-align: center;
 }
 
 h1{
@@ -137,7 +143,14 @@ h4{
     filter:brightness(60%);
 }
 
-#loginButton{
+.navRow td{
+    padding:5pt 0
+}
+.navRow td:last-child{
+    text-align: right;
+}
+
+button {
     border: 0;
     color:hsl(31 12% 88% / 1);
     padding: 7.5pt 15pt;
@@ -145,6 +158,14 @@ h4{
     font-weight: bold;
     background-color: #AD5D4E;
     font-size: 13pt;
+}
+
+button.small {
+    padding: 5pt 10pt;
+    font-size: 11pt;
+}
+
+#loginButton{
     background-image: url("http://localhost:8080/icons/spotify.svg");
     background-repeat: no-repeat;
     background-position: 5pt center;

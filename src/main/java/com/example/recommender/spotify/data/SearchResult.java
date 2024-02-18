@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties
 public class SearchResult {
     private Tracks tracks;
+    private String error;
 
     public SearchResult() {
     }

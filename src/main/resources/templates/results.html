@@ -3,21 +3,67 @@
 <head>
     <script src="js/results.js"></script>
 </head>
-<div th:text="|Results for query: ${query}|"/>
+<!--<div th:text="|Results for query: ${query}|"/>-->
 
 <div class="container">
-    <table style="text-align: left">
+    <table style="text-align: left;width: 978px">
+        <tr class="navRow">
+            <td colspan="2">
+                <button th:if="${results.getTracks().getPrevious() != null}"
+                        th:onclick="searchPrev()"
+                        class="small">
+                    Previous
+                </button>
+            </td>
+
+            <td>
+                <div class="horizontalCenter" th:text="|Page ${currentPage}|"></div>
+            </td>
+
+            <td>
+
+                <button th:if="${results.getTracks().getNext() != null}"
+                        th:onclick="searchNext()"
+                        class="small">
+                    Next
+                </button>
+            </td>
+        </tr>
+
         <tr class="headerRow">
             <td>#</td>
             <td>Track</td>
             <td>Album</td>
             <td>Artist</td>
         </tr>
+
         <tr class="selectableRow" th:id="${track.getId()}" th:each="track, iStat: ${results.getTracks().getItems()}">
-            <td th:text="|${iStat.count}.|"/>
-            <td th:text="${track.getName()}"/>
-            <td th:text="${track.getAlbum().getName()}"/>
-            <td th:text="${track.getArtistNames()}"/>
+            <td style="width: 1%" th:text="|${iStat.count + results.getTracks().getOffset()}.|"/>
+            <td style="width: 32%" th:text="${track.getName()}"/>
+            <td style="width: 32%" th:text="${track.getAlbum().getName()}"/>
+            <td style="width: 32%" th:text="${track.getArtistNames()}"/>
+        </tr>
+
+        <tr class="navRow">
+            <td colspan="2">
+                <button th:if="${results.getTracks().getPrevious() != null}"
+                        th:onclick="searchPrev()"
+                        class="small">
+                    Previous
+                </button>
+            </td>
+
+            <td>
+                <div class="horizontalCenter" th:text="|Page ${currentPage}|"></div>
+            </td>
+
+            <td>
+                <button th:if="${results.getTracks().getNext() != null}"
+                        th:onclick="searchNext()"
+                        class="small">
+                    Next
+                </button>
+            </td>
         </tr>
     </table>
 </div>

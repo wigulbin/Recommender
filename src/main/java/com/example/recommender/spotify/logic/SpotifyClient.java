@@ -6,6 +6,7 @@ import com.example.recommender.beans.SpotifyProfile;
 import com.example.recommender.beans.Track;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.spotify.data.SearchResult;
+import com.example.recommender.spotify.data.Tracks;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,6 +31,7 @@ public class SpotifyClient {
     private static String clientid = "";
     private static String clientSecret = "";
     private static final String REDIRECT_URL = "http://localhost:8080/callback";
+    private static final String BASE_URL = "https://api.spotify.com/v1";
 
     static {
         try {
@@ -72,12 +74,20 @@ public class SpotifyClient {
 
     public SearchResult searchApiForTrack(String query) throws IOException, InterruptedException, URISyntaxException{
         //TODO URL Encode query
-        return searchApi(query, "track");
+        return searchApi(BASE_URL + "/search?query=" + URLEncoder.encode(query, StandardCharsets.UTF_8)  + "&type=track");
     }
 
-    public SearchResult searchApi(String query, String typeString) throws IOException, InterruptedException, URISyntaxException{
+    public SearchResult getNextTracksFromResult(Tracks tracks) throws IOException, InterruptedException, URISyntaxException{
+        return searchApi(tracks.getNext());
+    }
+
+    public SearchResult getPrevTracksFromResult(Tracks tracks) throws IOException, InterruptedException, URISyntaxException{
+        return searchApi(tracks.getPrevious());
+    }
+
+    public SearchResult searchApi(String url) throws IOException, InterruptedException, URISyntaxException{
         //TODO URL Encode query
-        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/search?q=" + URLEncoder.encode(query) + "&type=" + typeString)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
+        HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI(url)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
