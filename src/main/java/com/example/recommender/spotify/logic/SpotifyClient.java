@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SpotifyClient {
     private AccessToken token = AccessToken.createToken(clientid, clientSecret);
@@ -123,6 +124,65 @@ public class SpotifyClient {
         return objectMapper.readValue(postResponse.body(), SpotifyProfile.class);
     }
 
+
+    public boolean startPlayback(String songid){
+        return adjustPlayback("play", songid);
+    }
+    public boolean pausePlayback(String songid){
+        return adjustPlayback("pause", songid);
+    }
+    public boolean prevPlayback(){
+        return adjustPlayback("previous");
+    }
+    public boolean nextPlayback(){
+        return adjustPlayback("next");
+    }
+
+    public boolean adjustPlayback(String endpoint, String songid){
+        try{
+            String url = BASE_URL + "/me/player/" + endpoint;
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("uris", List.of("spotify:track:" + songid));
+            String json = new ObjectMapper().writeValueAsString(parameters);
+
+            HttpRequest postRequest = HttpRequest.newBuilder()
+                    .uri(new URI(url))
+                    .header("Authorization", "Bearer " + token.getAccessToken())
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println(postResponse.statusCode());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return true;
+    }
+
+    public boolean adjustPlayback(String endpoint){
+        try{
+            String url = BASE_URL + "/me/player/" + endpoint;
+            Map<String, Object> parameters = new HashMap<>();
+
+            HttpRequest postRequest = HttpRequest.newBuilder()
+                    .uri(new URI(url))
+                    .header("Authorization", "Bearer " + token.getAccessToken())
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(""))
+                    .build();
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println(postResponse.statusCode());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return true;
+    }
+
+    // Getters/Setters
     public static String getClientid() {
         return clientid;
     }

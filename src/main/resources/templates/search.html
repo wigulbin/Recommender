@@ -1,35 +1,31 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-    <script src="js/script.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-</head>
+<head th:include="fragments/header :: header"></head>
 <body>
-<div th:replace="fragments/header :: header"></div>
 
-<div id="main" class="flexCenter">
-    <div>
+<nav th:replace="fragments/nav :: nav"></nav>
+
+
+<form action="/selectSeed" method="POST" name="frmSelectTrack" id="frmSelectTrack">
+    <input type="hidden" id="trackid" name="trackid" value="">
+</form>
+
+<main class="container">
+    <div class="flexCenter column">
         <div class="flexCenter">
             Select a song below to seed your Radio Station
         </div>
 
-        <div id="searchBar" class="flexAlign">
-            <img src="icons/search.svg" width="32px" alt="">
-            <input  type="text" name="search" onchange="search(this.value)">
+        <div style="display: flex;align-items: center;justify-content: center">
+            <input  type="search" name="search" onchange="search(this.value)" aria-label="search" placeholder="Search">
         </div>
 
-        <div id="searchResults" >
+        <div id="searchResults" class="container">
 
         </div>
     </div>
-</div>
+</main>
 
-<div th:fragment="footer"></div>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

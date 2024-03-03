@@ -6,7 +6,8 @@
 <!--<div th:text="|Results for query: ${query}|"/>-->
 
 <div class="container">
-    <table style="text-align: left;width: 978px">
+    <table>
+        <thead>
         <tr class="navRow">
             <td colspan="2">
                 <button th:if="${results.getTracks().getPrevious() != null}"
@@ -16,11 +17,10 @@
                 </button>
             </td>
 
-            <td>
-                <div class="horizontalCenter" th:text="|Page ${currentPage}|"></div>
+            <td class="alignCenter">
             </td>
 
-            <td>
+            <td class="alignRight">
 
                 <button th:if="${results.getTracks().getNext() != null}"
                         th:onclick="searchNext()"
@@ -31,19 +31,23 @@
         </tr>
 
         <tr class="headerRow">
-            <td>#</td>
-            <td>Track</td>
-            <td>Album</td>
-            <td>Artist</td>
+            <th style="border-top-left-radius: 10pt;">#</th>
+            <th>Track</th>
+            <th>Album</th>
+            <th style="border-top-right-radius: 10pt;">Artist</th>
         </tr>
+        </thead>
 
+        <tbody>
         <tr class="selectableRow" th:id="${track.getId()}" th:each="track, iStat: ${results.getTracks().getItems()}">
             <td style="width: 1%" th:text="|${iStat.count + results.getTracks().getOffset()}.|"/>
             <td style="width: 32%" th:text="${track.getName()}"/>
             <td style="width: 32%" th:text="${track.getAlbum().getName()}"/>
             <td style="width: 32%" th:text="${track.getArtistNames()}"/>
         </tr>
+        </tbody>
 
+        <tfoot>
         <tr class="navRow">
             <td colspan="2">
                 <button th:if="${results.getTracks().getPrevious() != null}"
@@ -53,11 +57,11 @@
                 </button>
             </td>
 
-            <td>
+            <td class="alignCenter">
                 <div class="horizontalCenter" th:text="|Page ${currentPage}|"></div>
             </td>
 
-            <td>
+            <td class="alignRight">
                 <button th:if="${results.getTracks().getNext() != null}"
                         th:onclick="searchNext()"
                         class="small">
@@ -65,6 +69,7 @@
                 </button>
             </td>
         </tr>
+        </tfoot>
     </table>
 </div>
 </html>

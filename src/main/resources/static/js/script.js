@@ -29,5 +29,13 @@ window.onload = () => {
 
 function selectableOnClick(e){
     const element = e.currentTarget;
-    alert(element.id);
+    const input = document.getElementById("trackid");
+    if(input){
+        input.value = element.id;
+        document.getElementById("frmSelectTrack").submit();
+    }
+}
+
+function adjustPlayback(element, endpoint){
+    fetch("/playback/" + endpoint + "?songid=" + element.id).then(res => res.text()).then(text => console.log(text));
 }

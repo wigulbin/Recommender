@@ -1,9 +1,28 @@
 :root{
-    --main-color: hsl(31 12% 12% / 1);
+    --main-color: hsl(31 12% 9% / 1);
     --second-color: hsl(31 12% 88% / 1);
     --third-color: hsl(33.44deg 85.92% 86.08%);
+
+    --search-color: hsl(190, 90%, 12%);
+    --search-color-unsat: hsl(190, 70%, 12%);
+    /*--search-color-unsat: hsl(183.1deg 83.55% 25.69%);*/
+    /*--search-color-unsat: hsl(354 28% 19% / 1);*/
 }
 
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+    --pico-background-color: hsl(31 12% 9% / 1);
+
+    --pico-form-element-background-color: var(--search-color-unsat);
+    --pico-form-element-active-background-color: var(--search-color);
+    --pico-border-color: var(--search-color-unsat);
+    --pico-form-element-active-border-color: var(--search-color-unsat);
+}
+
+input[type="search"]{
+    width:85%;
+    height:40pt;
+}
 
 html{
     font-family: Lato, "Roboto Light", serif;
@@ -12,114 +31,22 @@ html{
     background-color: var(--main-color);
     color: var(--second-color);
 }
-body{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    margin: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-div{
 
+html body header, html body main, html body footer{
+    padding:5pt 2.5pt;
 }
 
 div.flexAlign{
     display: flex;
     align-items: center;
+    gap:5pt
 }
+
+
 
 span.flexAlign{
     display: inline-flex;
     align-items: center;
-}
-
-.horizontalCenter{
-    text-align: center;
-}
-
-h1{
-    font-size: 36pt;
-}
-
-h4{
-    font-weight: bold;
-    font-size: 13pt;
-    padding:0;
-}
-
-#header{
-    padding:5pt;
-    margin-bottom:5pt;
-}
-#main{
-    flex-grow: 7;
-    text-align: center;
-}
-#footer{
-    padding:5pt;
-}
-
-#searchBar{
-    height: 25pt;
-    width: 50vw;
-    border-radius: 25pt;
-    background-color: var(--second-color);
-    padding: 5pt 7pt;
-}
-
-#searchBar>input{
-    border:0;
-    border-radius:10pt;
-    height:99%;
-    width:90%;
-    padding:0 5pt;
-    font-size: 16pt;
-    background-color: var(--second-color);
-}
-
-#searchBar>input:focus-visible{
-    outline:0;
-}
-
-#logoText{
-    font-size:30pt;
-    letter-spacing: 3pt;
-    font-weight: 700;
-}
-
-#logo{
-
-}
-
-#landingPageCard{
-    width: 245pt;
-    height: 315pt;
-    border: 4pt solid hsl(34 85% 86% / 1);
-    border-radius: 5pt;
-    position: relative;
-    background-color: var(--third-color);
-    color: var(--main-color);
-}
-
-#landingPageLogo{
-    position: absolute;
-    border-radius: 46pt;
-    background: #221f1b;
-    padding: 5pt;
-    top: -40px;
-    right: 125px;
-    border: 4pt solid var(--third-color);
-}
-
-.container{
-    height: 85%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    text-align:center;
 }
 
 .flexCenter{
@@ -127,47 +54,40 @@ h4{
     justify-content: center;
 }
 
-.headerRow td{
-    font-weight: bold;
+.flexCenter.column{
+    flex-direction: column;
+    gap:5pt
 }
 
-.selectableRow{
-    cursor: pointer;
+.alignLeft{
+    text-align: left;
 }
 
-.selectableRow td{
-    padding: 5pt 0;
-}
-
-.selectableRow:hover{
-    filter:brightness(60%);
-}
-
-.navRow td{
-    padding:5pt 0
-}
-.navRow td:last-child{
+.alignRight{
     text-align: right;
 }
 
-button {
-    border: 0;
-    color:hsl(31 12% 88% / 1);
-    padding: 7.5pt 15pt;
-    border-radius: 5pt;
-    font-weight: bold;
-    background-color: #AD5D4E;
-    font-size: 13pt;
+.alignCenter{
+    text-align:center;
 }
 
-button.small {
-    padding: 5pt 10pt;
-    font-size: 11pt;
+button.small{
+    padding: 2.5pt 7.5pt;
+    font-size: 0.9em;
 }
 
-#loginButton{
-    background-image: url("http://localhost:8080/icons/spotify.svg");
-    background-repeat: no-repeat;
-    background-position: 5pt center;
-    padding-left:30pt;
+table{
+    font-size: 12pt;
+}
+
+tr.headerRow th{
+    background-color: var(--search-color);
+}
+
+tbody td{
+    border-color: var(--search-color-unsat);
+}
+
+thead td, thead th{
+    border: none;
 }

@@ -1,5 +1,8 @@
 package com.example.recommender.controllers;
 
+import com.example.recommender.repositories.RadioStationRepository;
+import com.example.recommender.repositories.RadioStationSeedRepository;
+import com.example.recommender.repositories.UserRepository;
 import com.example.recommender.spotify.data.SearchResult;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
@@ -13,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -32,8 +32,12 @@ import java.util.Map;
 public class WebController {
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
 
-//    @Autowired
-//    UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    RadioStationSeedRepository radioStationSeedRepository;
+    @Autowired
+    RadioStationRepository radioStationRepository;
 
     @GetMapping("/")
     public String landingPage(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -71,7 +75,8 @@ public class WebController {
     @GetMapping("/getProfile")
     public RedirectView getProfile(Model model) throws IOException, URISyntaxException, InterruptedException {
         if(model.getAttribute("client") instanceof SpotifyClient client) {
-            client.findProfile();
+//            client.findProfile();
+//            userRepository.save(client.g)
         }
         return new RedirectView("/search");
     }
@@ -92,59 +97,29 @@ public class WebController {
         return "track";
     }
 
-    @GetMapping("/search")
-    public String getSearch(@RequestParam(name="trackid", required=false, defaultValue="") String trackid, Model model) throws IOException, URISyntaxException, InterruptedException {
+    /*
+    TODO:
+    1. Sam's App:
+        - Send seed track to Sam's application
+        - Receive list of tracks to start with
+    2. Create Radio Station object
+        - RadioStation.java + RadioStationSeed.java
+        - What fields do we need besides track id to create these?
+    3. Save objects to be retrieved later
+    4. Redirect to radio station screen
+    */
+    @PostMapping("/selectSeed")
+    public ModelAndView selectSeed(@RequestParam(name="trackid") String trackid, ModelMap model){
 
-        return "search";
+        model.addAttribute("trackid", trackid);
+        return new ModelAndView("redirect:/radioStation/" + trackid, model);
     }
 
-    @PostMapping("/search")
-    public String postSearch(@RequestParam(name="query", required=true, defaultValue="") String query,
-                             @RequestParam(name="types", required=true, defaultValue="") String types,
-                             Model model) throws IOException, URISyntaxException, InterruptedException {
-        if(model.getAttribute("client") instanceof SpotifyClient client){
-            SearchResult results = client.searchApiForTrack(query);
+    @GetMapping("/radioStation/{id}")
+    public String viewRadioStation(@PathVariable(name="id") String trackid, Model model){
+        model.addAttribute("trackid", trackid);
 
-            model.addAttribute("results", results);
-            model.addAttribute("currentPage", SpotifyHelper.getCurrentPage(results.getTracks()));
-            model.addAttribute("totalPages", SpotifyHelper.getTotalPages(results.getTracks()));
-            model.addAttribute("query", query);
-        }
-
-
-        return "results";
-    }
-
-    @GetMapping("/search/next")
-    public String getNext(Model model) throws IOException, URISyntaxException, InterruptedException {
-        SpotifyClient client = (SpotifyClient)model.getAttribute("client");
-        SearchResult oldResults = (SearchResult)model.getAttribute("results");
-
-        if(oldResults != null && oldResults.getTracks().getNext() != null){
-            SearchResult results = client.getNextTracksFromResult(oldResults.getTracks());
-            model.addAttribute("results", results);
-
-            model.addAttribute("currentPage", SpotifyHelper.getCurrentPage(results.getTracks()));
-            model.addAttribute("totalPages", SpotifyHelper.getTotalPages(results.getTracks()));
-        }
-
-        return "results";
-    }
-
-    @GetMapping("/search/prev")
-    public String getPrev(Model model) throws IOException, URISyntaxException, InterruptedException {
-        SpotifyClient client = (SpotifyClient)model.getAttribute("client");
-        SearchResult oldResults = (SearchResult)model.getAttribute("results");
-
-        if(oldResults != null && oldResults.getTracks().getPrevious() != null){
-            SearchResult results = client.getPrevTracksFromResult(oldResults.getTracks());
-            model.addAttribute("results", results);
-
-            model.addAttribute("currentPage", SpotifyHelper.getCurrentPage(results.getTracks()));
-            model.addAttribute("totalPages", SpotifyHelper.getTotalPages(results.getTracks()));
-        }
-
-        return "results";
+        return "radio";
     }
 
     @GetMapping("/album")

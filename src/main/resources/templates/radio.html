@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: header"></head>
+<body>
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<main class="container">
+    <div class="flexCenter column">
+        <div class="flexCenter">
+            Your Radio Station
+        </div>
+
+        <div id="searchResults" class="container">
+            <div class="container">
+                <div>Song</div>
+                <div class="flexAlign">
+                    <div><img th:id="${trackid}" onclick="adjustPlayback(this, 'prev')" th:src="@{/icons/skip_prev.svg}" alt=""></div>
+                    <div><img th:id="${trackid}" onclick="adjustPlayback(this, 'start')" th:src="@{/icons/play.svg}" alt=""></div>
+                    <div><img th:id="${trackid}" onclick="adjustPlayback(this, 'next')" th:src="@{/icons/skip_next.svg}" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
