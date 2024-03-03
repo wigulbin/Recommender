@@ -57,8 +57,8 @@ public class WebController {
         return new RedirectView(authURL);  // we redirect the user to the spotify login screen with the state, scopes, etc.
     }
 
-    @GetMapping("/callback")
 
+    @GetMapping("/callback")
     public ModelAndView callback(@RequestParam(name="code", required=false, defaultValue="") String code,  // code passed back from spotify
                                  @RequestParam(name="state", required=false, defaultValue="") String state,  // when this comes back from spotify it should match the state that we created and saved earlier
                                  @RequestParam(name="error", required=false, defaultValue="") String error,  // if we get any errors
@@ -71,9 +71,20 @@ public class WebController {
 
         return new ModelAndView("redirect:/getProfile", model);
     }
-
+    /*
+    TODO:
+    1. Call find profile from client
+        - Maps to SpotifyProfile object (ideally this class is in the spotify.data package)
+    2. Create an User object based on the profile
+        - Determine which fields we need
+        - See if anything needs to be added/removed from the User table
+    3. Save User object
+        - Ensure that object saves to database without error
+    4. Set User object to the model/session to be used in other places
+        - See @SessionAttributes({"client", "results"}) annotation, field for user will need to be added
+    */
     @GetMapping("/getProfile")
-    public RedirectView getProfile(Model model) throws IOException, URISyntaxException, InterruptedException {
+    public RedirectView getProfile(Model model) {
         if(model.getAttribute("client") instanceof SpotifyClient client) {
 //            client.findProfile();
 //            userRepository.save(client.g)
@@ -99,14 +110,17 @@ public class WebController {
 
     /*
     TODO:
-    1. Sam's App:
-        - Send seed track to Sam's application
-        - Receive list of tracks to start with
-    2. Create Radio Station object
+    1. Create Radio Station object
         - RadioStation.java + RadioStationSeed.java
         - What fields do we need besides track id to create these?
-    3. Save objects to be retrieved later
-    4. Redirect to radio station screen
+        - Will also need RadioStationSong.java to save seed track into + additional tracks from Sam's app
+        - These will be dependent on the RadioStation id, Seed + Track are linked to that table
+        - Will also need User.java information to set the user id for these
+    2. Save objects to be retrieved later
+    3. Redirect to radio station screen
+    4. Sam's App (Dont worry about for now):
+        - Send seed track to Sam's application
+        - Receive list of tracks to start with
     */
     @PostMapping("/selectSeed")
     public ModelAndView selectSeed(@RequestParam(name="trackid") String trackid, ModelMap model){
