@@ -3,6 +3,8 @@ package com.example.recommender.controllers;
 import com.example.recommender.repositories.RadioStationRepository;
 import com.example.recommender.repositories.RadioStationSeedRepository;
 import com.example.recommender.repositories.UserRepository;
+import com.example.recommender.spotify.data.Device;
+import com.example.recommender.spotify.data.Devices;
 import com.example.recommender.spotify.data.SearchResult;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +50,7 @@ public class WebController {
 
     @GetMapping("/login")
     public RedirectView loginWithSpotify(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        List<String> scopeList = List.of("app-remote-control", "streaming", "playlist-read-private", "playlist-read-collaborative", "user-read-playback-position", "user-top-read", "user-read-recently-played", "user-library-read", "user-read-email");
+        List<String> scopeList = List.of("app-remote-control", "streaming", "playlist-read-private", "playlist-read-collaborative", "user-read-playback-position", "user-top-read", "user-read-recently-played", "user-library-read", "user-read-email", "user-read-playback-state");
         String scopes = String.join(" ", scopeList);
         String state = "129030983124089u";  // this will be a random string that we generate and store. we then send it to spotify with the request and make sure that it matches when spotify sends us a request back
         String encodedRedirect = SpotifyClient.getEncodedRedirectURL();
@@ -162,6 +165,19 @@ public class WebController {
     @PostMapping("/testSubmit")
     public RedirectView postInfo(@RequestParam(name = "OurInput", required = false, defaultValue = "") String ourInput) {
         return new RedirectView("/test?input=" + ourInput);
+    }
+
+    @GetMapping("/currentDevices")
+    public String findCurrentDevices(Model model) {
+        List<Device> deviceList = new ArrayList<>();
+        if(model.getAttribute("client") instanceof SpotifyClient client) {
+            Devices devices = client.findDevices();
+            if(devices != null)
+                deviceList.addAll(devices.getDevices());
+        }
+
+        model.addAttribute("devices", deviceList);
+        return "currentDevices";
     }
 }
 

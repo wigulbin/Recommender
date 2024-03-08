@@ -1,27 +1,51 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 <head th:include="fragments/header :: header"></head>
+
+
 <body>
 <nav th:replace="fragments/nav :: nav"></nav>
 
-<main class="container">
-    <div class="flexCenter column">
+<main class="">
+    <div class="">
         <div class="flexCenter">
             Your Radio Station
         </div>
 
+        <div>
+            <div id="carousel" >
+                <!--            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0j8Nj2HX6F8ZLjyY9FD33j?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>-->
+                <div class="item"><div style="border-radius: 12pt" th:id="${trackid}" class="embed-iframe"></div></div>
+                <div class="item"><div style="border-radius: 12pt" th:id="1xKa9udj0tDsVTjgOKWu9D" class="embed-iframe"></div></div>
+                <div class="item"><div style="border-radius: 12pt" th:id="2HjaUtSMTcyn6orIglDwch" class="embed-iframe"></div></div>
+            </div>
+        </div>
+
         <div id="searchResults" class="container">
-            <div class="container">
-                <div>Song</div>
-                <div class="flexAlign">
-                    <div><img th:id="${trackid}" onclick="adjustPlayback(this, 'prev')" th:src="@{/icons/skip_prev.svg}" alt=""></div>
-                    <div><img th:id="${trackid}" onclick="adjustPlayback(this, 'start')" th:src="@{/icons/play.svg}" alt=""></div>
-                    <div><img th:id="${trackid}" onclick="adjustPlayback(this, 'next')" th:src="@{/icons/skip_next.svg}" alt=""></div>
+            <div class="flexAlign" style="justify-content: space-around;filter: invert(0.7);">
+                <div class="flexAlign" style="justify-content: center">
+                    <div><img title="Previous" class="icon large" th:id="${trackid}" onclick="adjustPlayback(this, 'prev')" th:src="@{/icons/skip_prev.svg}" alt=""></div>
+                    <div><img title="Next" class="icon large" th:id="${trackid}" onclick="adjustPlayback(this, 'next')" th:src="@{/icons/skip_next.svg}" alt=""></div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <dialog id="currentDevices">
+            <article>
+                <h4>Current Devices</h4>
+                <div id="currentDeviceContent">
+
+                </div>
+                <footer>
+                    <button class="small" onclick="closeDialog('currentDevices')">
+                        Close
+                    </button>
+                </footer>
+            </article>
+        </dialog>
 </main>
 
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

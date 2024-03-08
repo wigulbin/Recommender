@@ -3,6 +3,8 @@
     --second-color: hsl(31 12% 88% / 1);
     --third-color: hsl(33.44deg 85.92% 86.08%);
 
+    --search-color-light: hsl(190, 90%, 42%);
+    --search-color-lighter: hsl(190, 90%, 22%);
     --search-color: hsl(190, 90%, 12%);
     --search-color-unsat: hsl(190, 70%, 12%);
     /*--search-color-unsat: hsl(183.1deg 83.55% 25.69%);*/
@@ -19,11 +21,82 @@
     --pico-form-element-active-border-color: var(--search-color-unsat);
 }
 
+html{
+
+    --position: 1;
+}
+
 input[type="search"]{
     width:85%;
     height:40pt;
 }
 
+input[type="range"]{
+    margin:10pt 0;
+}
+input[type="range"] {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    /*  slider progress trick  */
+    overflow: hidden;
+    /*border-radius: 16px;*/
+    transition: height 0.1s ease;
+    height:12px
+}
+input[type="range"]:hover {
+    height: 15px;
+    transition: height 0.1s ease;
+}
+
+/* Track: webkit browsers */
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px;
+}
+/* Track: webkit browsers */
+input[type="range"]:hover::-webkit-slider-runnable-track {
+    height: 5px;
+}
+
+/*!* Track: Mozilla Firefox *!*/
+input[type="range"]::-moz-range-track {
+    height: 4px;
+}
+
+/* Thumb: webkit */
+input[type="range"]::-webkit-slider-thumb {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    padding:0;
+     /*creating a custom design */
+    height: 140px;
+    width: 5px;
+    background-color: var(--search-color-light);
+    border-radius: 0;
+    border: 0;
+      /*slider progress trick  */
+    box-shadow: -407px 0 0px 403px var(--search-color-lighter);
+}
+
+/* Thumb: webkit */
+input[type="range"]:focus::-webkit-slider-thumb {
+    width: 7.5px;
+}
+
+/* Thumb: Firefox */
+input[type="range"]::-moz-range-thumb {
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    border: 1px solid #1100ff;
+    /*  slider progress trick  */
+    box-shadow: 207px 0 0 200px #ff00ea;
+}
 html{
     font-family: Lato, "Roboto Light", serif;
     height: 100vh;
@@ -90,4 +163,90 @@ tbody td{
 
 thead td, thead th{
     border: none;
+}
+
+.box{
+    width:80%;
+    margin:0 auto;
+}
+
+
+.icon{
+    width:30px;
+    height: 30px;
+}
+.icon.large{
+    width:38px;
+    height:38px;
+}
+
+.icon:hover{
+    filter:invert(0.7);
+    cursor:pointer;
+}
+
+div#carouselContainer {
+    height: 600px;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 500px 100px;
+    grid-template-columns: 1fr 30px 30px 30px 30px 30px 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+div#carousel {
+    grid-row: 1 / 2;
+    grid-column: 1 / 8;
+    width: 100vw;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    perspective: 4000px;
+    --items: 5;
+    --middle: 3;
+    pointer-events: none;
+}
+
+div.item {
+    position: absolute;
+    border-radius: 15pt;
+    --r: calc(var(--position) - var(--offset));
+    --abs: max(calc(var(--r) * -1), var(--r));
+    /*width: 600px;*/
+    --dimensionFactor: min(var(--abs), 1);
+    width: calc( 600px - calc(var(--dimensionFactor) * 150px));
+    filter: brightness(calc(var(--dimensionFactor)) * 70%);
+    height: calc( 352px - calc(var(--dimensionFactor) * 52x));
+    transition: all 0.25s linear;
+    transform: rotateY(calc(-10deg * var(--r)))
+    translateX(calc(-300px * var(--r)));
+    z-index: calc((var(--position) - var(--abs)));
+    overflow-y: hidden;
+}
+
+div.item:nth-of-type(1) {
+    --offset: 1;
+    pointer-events: all;
+}
+div.item:nth-of-type(2) {
+    --offset: 2;
+}
+div.item:nth-of-type(3) {
+    --offset: 3;
+}
+div.item:nth-of-type(4) {
+    --offset: 4;
+}
+div.item:nth-of-type(5) {
+    --offset: 5;
+}
+
+
+
+.item iframe{
+    border-radius: 12pt;
 }

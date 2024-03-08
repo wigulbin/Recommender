@@ -36,6 +36,64 @@ function selectableOnClick(e){
     }
 }
 
+
+function getCurrentDevices(){
+    fetch('/currentDevices')
+        .then(res => res.text())
+        .then(html => {
+            console.log(html);
+            document.getElementById("currentDeviceContent").innerHTML = html;
+            openDialog('currentDevices')
+        })
+}
+
+function openDialog(id){
+    const dialog = document.getElementById(id);
+    if(dialog){
+        dialog.open = true;
+    }
+}
+
+function closeDialog(id){
+    const dialog = document.getElementById(id);
+    if(dialog){
+        dialog.open = false;
+    }
+}
+
+const spotifyFrames = {};
+window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    //
+    console.log(IFrameAPI);
+
+    let element = document.getElementById('embed-iframe');
+    [... document.getElementsByClassName('embed-iframe')].forEach((element, idx) => {
+        let containerDiv = element.parentElement;
+        containerDiv.setAttribute("aria-busy", "true")
+        let options = {
+            width: '100%',
+            height: 352,
+            uri: 'spotify:track:' + element.id
+        };
+
+        let callback = (EmbedController) => {
+            containerDiv.setAttribute("aria-busy", "false")
+            if(idx === 0) {
+                EmbedController.play();
+            }
+        };
+        IFrameAPI.createController(element, options, callback);
+        spotifyFrames[element.id] = containerDiv;
+    })
+};
+
+
+let currentPosition = 1;
 function adjustPlayback(element, endpoint){
-    fetch("/playback/" + endpoint + "?songid=" + element.id).then(res => res.text()).then(text => console.log(text));
+    if(endpoint == 'next'){
+        document.documentElement.setAttribute("style", "--position: " + (++currentPosition));
+    }
+    if(endpoint == 'prev'){
+        document.documentElement.setAttribute("style", "--position: " + (--currentPosition));
+    }
 }

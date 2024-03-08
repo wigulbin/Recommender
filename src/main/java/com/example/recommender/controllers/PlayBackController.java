@@ -3,13 +3,17 @@ package com.example.recommender.controllers;
 import com.example.recommender.repositories.RadioStationRepository;
 import com.example.recommender.repositories.RadioStationSeedRepository;
 import com.example.recommender.repositories.UserRepository;
+import com.example.recommender.spotify.data.Device;
+import com.example.recommender.spotify.data.Devices;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SessionAttributes({"client", "results"})

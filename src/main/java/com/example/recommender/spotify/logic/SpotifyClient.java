@@ -5,6 +5,7 @@ import com.example.recommender.beans.Album;
 import com.example.recommender.beans.SpotifyProfile;
 import com.example.recommender.beans.Track;
 import com.example.recommender.beans.Artist;
+import com.example.recommender.spotify.data.Devices;
 import com.example.recommender.spotify.data.SearchResult;
 import com.example.recommender.spotify.data.Tracks;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -122,6 +123,26 @@ public class SpotifyClient {
 
 
         return objectMapper.readValue(postResponse.body(), SpotifyProfile.class);
+    }
+
+    public Devices findDevices() {
+        try{
+            HttpRequest postRequest = HttpRequest.newBuilder()
+                    .uri(new URI("https://api.spotify.com/v1/me/player/devices"))
+                    .header("Authorization", "Bearer " + token.getAccessToken())
+                    .GET()
+                    .build();
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            ObjectMapper objectMapper = new ObjectMapper();
+
+
+            return objectMapper.readValue(postResponse.body(), Devices.class);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

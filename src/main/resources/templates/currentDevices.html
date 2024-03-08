@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<div th:if="${devices.size() == 0}">
+    No devices found
+</div>
+<table>
+    <tr class="selectableRow" th:id="${device.getId()}" th:each="device, iStat: ${devices}">
+        <td style="width: 1%" th:text="|${iStat.count}.|"/>
+        <td style="width: 32%" th:text="${device.getName()}"/>
+        <td style="width: 32%" th:text="${device.getType()}"/>
+    </tr>
+</table>
+</html>
