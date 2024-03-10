@@ -134,6 +134,10 @@ public class WebController {
 
     @GetMapping("/radioStation/{id}")
     public String viewRadioStation(@PathVariable(name="id") String trackid, Model model){
+
+        if(model.getAttribute("client") instanceof SpotifyClient client){
+            model.addAttribute("recommendations", client.getRecommendations(trackid).getTracks());
+        }
         model.addAttribute("trackid", trackid);
 
         return "radio";

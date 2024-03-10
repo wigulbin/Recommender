@@ -7,6 +7,7 @@ import com.example.recommender.beans.Track;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.spotify.data.Devices;
 import com.example.recommender.spotify.data.SearchResult;
+import com.example.recommender.spotify.data.SeedResults;
 import com.example.recommender.spotify.data.Tracks;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -79,6 +80,22 @@ public class SpotifyClient {
         return searchApi(BASE_URL + "/search?query=" + URLEncoder.encode(query, StandardCharsets.UTF_8)  + "&type=track");
     }
 
+
+    public SeedResults getRecommendations(String trackid) {
+        try {
+            HttpRequest postRequest = HttpRequest.newBuilder().uri(new URI("https://api.spotify.com/v1/recommendations?limit=9&seed_tracks=" + trackid)).header("Authorization", "Bearer " + token.getAccessToken()).GET().build();
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            SeedResults results = objectMapper.readValue(postResponse.body(), SeedResults.class);
+
+            return results;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     public SearchResult getNextTracksFromResult(Tracks tracks) throws IOException, InterruptedException, URISyntaxException{
         return searchApi(tracks.getNext());
     }
