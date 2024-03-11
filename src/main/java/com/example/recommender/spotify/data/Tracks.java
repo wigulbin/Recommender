@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties
 public class Tracks {
@@ -16,6 +19,18 @@ public class Tracks {
     private List<Track> items = new ArrayList<>();
 
     public Tracks() {
+    }
+
+    public Map<String, List<Track>> getMap(List<Track> items) {
+        return items.stream().collect(Collectors.groupingBy(track -> track.getAlbum().getName()));
+    }
+
+    public Map<String, Album> getMapAlbums () {
+        return items.stream()
+                .map(Track::getAlbum)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toMap(Album::getName, album -> album, (album1, album2) -> album1));
     }
 
     public String getHref() {

@@ -2,13 +2,9 @@ package com.example.recommender.spotify.logic;
 
 import com.example.recommender.api.Common;
 import com.example.recommender.beans.Album;
-import com.example.recommender.beans.SpotifyProfile;
 import com.example.recommender.beans.Track;
 import com.example.recommender.beans.Artist;
-import com.example.recommender.spotify.data.Devices;
-import com.example.recommender.spotify.data.SearchResult;
-import com.example.recommender.spotify.data.SeedResults;
-import com.example.recommender.spotify.data.Tracks;
+import com.example.recommender.spotify.data.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

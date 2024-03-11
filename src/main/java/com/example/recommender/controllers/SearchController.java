@@ -30,7 +30,6 @@ public class SearchController {
 
     @GetMapping("/search")
     public String getSearch(@RequestParam(name="trackid", required=false, defaultValue="") String trackid, Model model) throws IOException, URISyntaxException, InterruptedException {
-
         return "search";
     }
 

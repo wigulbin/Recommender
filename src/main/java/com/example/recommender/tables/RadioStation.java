@@ -24,8 +24,7 @@ public class RadioStation {
     @OneToMany(mappedBy = "radioStation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RadioStationSeed> seeds;
 
-    public RadioStation() {
-    }
+    public RadioStation() {}
 
     public long getId() {
         return id;

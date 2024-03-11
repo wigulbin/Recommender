@@ -1,5 +1,6 @@
 package com.example.recommender.tables;
 
+import com.example.recommender.spotify.data.SpotifyProfile;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,10 +15,28 @@ public class User {
     private int imageHeight;
     private int imageWidth;
 
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // what is this for?
     private List<RadioStation> radioStations;
 
-    public User() {
+    public User() {}
+
+    public User(String id, String userName, String product, String imageUrl, int imageHeight, int imageWidth, List<RadioStation> radioStations) {
+        this.id = id;
+        this.userName = userName;
+        this.product = product;
+        this.imageUrl = imageUrl;
+        this.imageHeight = imageHeight;
+        this.imageWidth = imageWidth;
+        this.radioStations = radioStations;
+    }
+
+    public void mimicProfile(SpotifyProfile profile) {
+        this.id = profile.getId();
+        this.userName = profile.getDisplayName();
+        this.product = profile.getProduct(); // ended up null when I first ran it, gotta check for that somewhere
+        this.imageUrl = profile.getImage().getFirst().getUrl();
+        this.imageHeight = profile.getImage().getFirst().getHeight();
+        this.imageWidth = profile.getImage().getFirst().getWidth();
     }
 
     @Override

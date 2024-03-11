@@ -64,7 +64,7 @@ public class Track{
     }
 
     public String getArtistNames(){
-        return artists.stream().map(Artist::getName).collect(Collectors.joining(", "));
+        return artists.stream().map(Artist::getName).collect(Collectors.joining(", ")); // Artist::getName   is identical to   artist -> artist.getName()
     }
 
     public Album getAlbum() {
