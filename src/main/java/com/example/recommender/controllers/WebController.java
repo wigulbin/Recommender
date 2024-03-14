@@ -3,15 +3,13 @@ package com.example.recommender.controllers;
 import com.example.recommender.repositories.RadioStationRepository;
 import com.example.recommender.repositories.RadioStationSeedRepository;
 import com.example.recommender.repositories.UserRepository;
-import com.example.recommender.spotify.data.Device;
-import com.example.recommender.spotify.data.Devices;
-import com.example.recommender.spotify.data.SearchResult;
+import com.example.recommender.spotify.data.SpotifyProfile;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
 //import com.example.recommender.repositories.UserRepository;
-import com.example.recommender.spotify.logic.SpotifyHelper;
+import com.example.recommender.tables.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.sql.SQLOutput;
 import java.util.List;
-import java.util.Map;
 
 @SessionAttributes({"client", "results"})
 @Controller
@@ -43,14 +38,13 @@ public class WebController {
     RadioStationRepository radioStationRepository;
 
     @GetMapping("/")
-    public String landingPage(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String landingPage() {
         return "landing";
     }
 
     @GetMapping("/login")
-    public RedirectView loginWithSpotify(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        List<String> scopeList = List.of("app-remote-control", "streaming", "playlist-read-private", "playlist-read-collaborative", "user-read-playback-position", "user-top-read", "user-read-recently-played", "user-library-read", "user-read-email", "user-read-playback-state");
+    public RedirectView loginWithSpotify() {
+        List<String> scopeList = List.of("app-remote-control", "streaming", "playlist-read-private", "playlist-read-collaborative", "user-read-playback-position", "user-top-read", "user-read-recently-played", "user-library-read", "user-read-email");
         String scopes = String.join(" ", scopeList);
         String state = "129030983124089u";  // this will be a random string that we generate and store. we then send it to spotify with the request and make sure that it matches when spotify sends us a request back
         String encodedRedirect = SpotifyClient.getEncodedRedirectURL();
@@ -76,10 +70,10 @@ public class WebController {
     }
     /*
     TODO:
-    1. Call find profile from client
-        - Maps to SpotifyProfile object (ideally this class is in the spotify.data package)
-    2. Create an User object based on the profile
-        - Determine which fields we need
+    X 1. Call find profile from client
+    X    - Maps to SpotifyProfile object (ideally this class is in the spotify.data package)
+    X2. Create an User object based on the profile
+    X    - Determine which fields we need
         - See if anything needs to be added/removed from the User table
     3. Save User object
         - Ensure that object saves to database without error
@@ -87,10 +81,21 @@ public class WebController {
         - See @SessionAttributes({"client", "results"}) annotation, field for user will need to be added
     */
     @GetMapping("/getProfile")
-    public RedirectView getProfile(Model model) {
+    public RedirectView getProfile(Model model) throws IOException, URISyntaxException, InterruptedException {
         if(model.getAttribute("client") instanceof SpotifyClient client) {
-//            client.findProfile();
-//            userRepository.save(client.g)
+            SpotifyProfile newProf = client.findProfile();
+            User newUser = new User();
+            newUser.mimicProfile(newProf); // sets necessary fields based on profile
+            System.out.println(newProf.getDisplayName());
+
+            System.out.println("User attributes: ");
+            System.out.println(newUser.getId());
+            System.out.println(newUser.getUserName());
+            System.out.println(newUser.getImageUrl());
+            System.out.println(newUser.getImageHeight());
+            System.out.println(newUser.getImageWidth());
+            System.out.println(newUser.getProduct());
+            userRepository.save(newUser);
         }
         return new RedirectView("/search");
     }
@@ -134,10 +139,6 @@ public class WebController {
 
     @GetMapping("/radioStation/{id}")
     public String viewRadioStation(@PathVariable(name="id") String trackid, Model model){
-
-        if(model.getAttribute("client") instanceof SpotifyClient client){
-            model.addAttribute("recommendations", client.getRecommendations(trackid).getTracks());
-        }
         model.addAttribute("trackid", trackid);
 
         return "radio";
@@ -169,19 +170,6 @@ public class WebController {
     @PostMapping("/testSubmit")
     public RedirectView postInfo(@RequestParam(name = "OurInput", required = false, defaultValue = "") String ourInput) {
         return new RedirectView("/test?input=" + ourInput);
-    }
-
-    @GetMapping("/currentDevices")
-    public String findCurrentDevices(Model model) {
-        List<Device> deviceList = new ArrayList<>();
-        if(model.getAttribute("client") instanceof SpotifyClient client) {
-            Devices devices = client.findDevices();
-            if(devices != null)
-                deviceList.addAll(devices.getDevices());
-        }
-
-        model.addAttribute("devices", deviceList);
-        return "currentDevices";
     }
 }
 
