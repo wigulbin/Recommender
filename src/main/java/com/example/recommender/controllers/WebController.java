@@ -9,10 +9,10 @@ import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
 //import com.example.recommender.repositories.UserRepository;
+import com.example.recommender.tables.RadioStation;
 import com.example.recommender.tables.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -22,20 +22,24 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.SQLOutput;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@SessionAttributes({"client", "results"})
+@SessionAttributes({"client", "results", "currentUser"})
 @Controller
 public class WebController {
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
 
-    @Autowired
+
     UserRepository userRepository;
-    @Autowired
     RadioStationSeedRepository radioStationSeedRepository;
-    @Autowired
     RadioStationRepository radioStationRepository;
+
+    public WebController(UserRepository userRepository, RadioStationSeedRepository radioStationSeedRepository, RadioStationRepository radioStationRepository){
+        this.userRepository = userRepository;
+        this.radioStationSeedRepository = radioStationSeedRepository;
+        this.radioStationRepository = radioStationRepository;
+    }
 
     @GetMapping("/")
     public String landingPage() {
@@ -96,6 +100,8 @@ public class WebController {
             System.out.println(newUser.getImageWidth());
             System.out.println(newUser.getProduct());
             userRepository.save(newUser);
+            model.addAttribute("currentUser", newUser);
+
         }
         return new RedirectView("/search");
     }
@@ -127,9 +133,17 @@ public class WebController {
     2. Save objects to be retrieved later
     3. Redirect to radio station screen
     4. Sam's App (Dont worry about for now):
-        - Send seed track to Sam's application
-        - Receive list of tracks to start with
-    */
+        - Send seed track to Sam's application (post request?)
+        - Receive list of tracks to start with (get request?)
+
+    TODO:
+    1. take in seed trackId and radioStation name from form
+    2. create radiostation object with seedTrackName and stationName
+    3. save radioStation
+    4. create radioStationSong object
+
+     */
+
     @PostMapping("/selectSeed")
     public ModelAndView selectSeed(@RequestParam(name="trackid") String trackid, ModelMap model){
 
@@ -170,6 +184,16 @@ public class WebController {
     @PostMapping("/testSubmit")
     public RedirectView postInfo(@RequestParam(name = "OurInput", required = false, defaultValue = "") String ourInput) {
         return new RedirectView("/test?input=" + ourInput);
+    }
+
+    @PostMapping("/getRadioStationDetails")
+    public RadioStation getRadioStationDetails(
+                                               @RequestParam(name = "stationName", defaultValue = "", required = true) String stationName,
+                                               @RequestParam(name = "trackId", defaultValue = "", required = true) long trackId,
+                                               Model model){
+        LocalDateTime createdAt = LocalDateTime.now();
+
+        return new RadioStation(stationName, trackId, createdAt, model);
     }
 }
 

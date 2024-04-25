@@ -1,6 +1,7 @@
 package com.example.recommender.tables;
 
 import jakarta.persistence.*;
+import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,8 +16,14 @@ public class RadioStation {
     @ManyToOne
     @JoinColumn(name="USER_ENTITY", referencedColumnName = "id")
     private User userEntity;
-    private String role = "";
+    private String role = ""; // don't remember why we added this
     private LocalDateTime createdAt;
+
+    private String stationName;
+
+    private String seedTrackName;
+
+    private long seedTrackId;
 
     @OneToMany(mappedBy = "radioStation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RadioStationSong> songs;
@@ -25,6 +32,12 @@ public class RadioStation {
     private List<RadioStationSeed> seeds;
 
     public RadioStation() {}
+
+    public RadioStation(String stationName, Long trackId, LocalDateTime createdAt, Model model) {
+        this.stationName = stationName;
+        this.seedTrackId = trackId;
+        this.createdAt = createdAt;
+    }
 
     public long getId() {
         return id;
@@ -58,3 +71,4 @@ public class RadioStation {
         this.createdAt = createdAt;
     }
 }
+

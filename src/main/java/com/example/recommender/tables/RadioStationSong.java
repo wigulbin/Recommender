@@ -16,6 +16,7 @@ public class RadioStationSong {
     private int percentCompleted;
     private boolean liked;
     private boolean disliked;
+    private boolean seed;
 
     public RadioStationSong() {}
 
@@ -26,6 +27,14 @@ public class RadioStationSong {
 
     public void setTrackId(long trackId) {
         this.trackId = trackId;
+    }
+
+    public boolean isSeed() {
+        return seed;
+    }
+
+    public void setSeed(boolean seed) {
+        this.seed = seed;
     }
 
     public RadioStation getRadioStation() {

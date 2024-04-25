@@ -8,12 +8,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class RadioStationSongKey implements Serializable {
-    @Id
     private long trackId;
-    @Id
-    @ManyToOne
-    @JoinColumn(name="RADIO_STATION_ID", referencedColumnName = "id")
     private RadioStation radioStation;
+
+    public RadioStationSongKey(long trackId, RadioStation radioStation) {
+        this.trackId = trackId;
+        this.radioStation = radioStation;
+    }
 
     @Override
     public boolean equals(Object o) {
