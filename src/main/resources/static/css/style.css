@@ -252,6 +252,9 @@ div.item:nth-of-type(5) {
     --offset: 5;
 }
 
+dialog td{
+    background: none;
+}
 
 
 .item iframe{

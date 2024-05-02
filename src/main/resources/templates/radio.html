@@ -27,40 +27,50 @@
         <div id="searchResults" class="container">
             <div class="flexAlign" style="justify-content: space-around;filter: invert(0.7);">
                 <div class="flexAlign" style="justify-content: center">
+                    <div>&nbsp;</div>
                     <div><img title="Previous" class="icon large" id="dislike" th:src="@{/icons/thumb_down.svg}" alt=""></div>
                     <div class="flexAlign">
                         <div><img title="Previous" class="icon large" id="prev" onclick="adjustPlayback('prev')" th:src="@{/icons/skip_prev.svg}" alt=""></div>
                         <div><img title="Next" class="icon large" id="next" onclick="adjustPlayback('next')" th:src="@{/icons/skip_next.svg}" alt=""></div>
                     </div>
                     <div><img title="Like" class="icon large" id="like" th:src="@{/icons/thumb_up.svg}" alt=""></div>
+                    <div><img th:src="@{/icons/queue_music.svg}" class="icon large" title="View Queue" onclick="openDialog('queue')" alt=""></div>
                 </div>
             </div>
         </div>
 
-        <div>
-            <div class="container">
-                <table>
-                    <thead>
-                    <tr>
-                        <td>Up Next:</td>
-                    </tr>
-                    </thead>
+            <dialog id="queue" >
+                <article>
+                    <header>
+                        <button aria-label="Close" rel="prev" onclick="closeDialog('queue')"></button>
+                        <p style="padding:5pt 15pt">
+                            <strong>Current Tracks</strong>
+                        </p>
+                    </header>
 
-                    <tbody>
-                    <tr class="selectableRow" th:id="${track.getId()}" th:each="track, iStat: ${recommendations}">
-                        <td style="width: 32%" th:text="${track.getName()}"/>
-                        <td style="width: 32%" th:text="${track.getAlbum().getName()}"/>
-                        <td style="width: 32%" th:text="${track.getArtistNames()}"/>
-                    </tr>
-                    </tbody>
+                    <table style="background:none">
+                        <thead>
+                        <tr>
+                            <td>Track</td>
+                            <td>Album</td>
+                            <td>Artist</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="selectableRow" th:id="${track.getId()}" th:each="track, iStat: ${recommendations}">
+                            <td style="width: 32%" th:text="${track.getName()}"/>
+                            <td style="width: 32%" th:text="${track.getAlbum().getName()}"/>
+                            <td style="width: 32%" th:text="${track.getArtistNames()}"/>
+                        </tr>
+                        </tbody>
 
-                    <tfoot>
-                    <tr class="navRow">
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
+                        <tfoot>
+                        <tr class="navRow">
+                        </tr>
+                        </tfoot>
+                    </table>
+                </article>
+            </dialog>
     </div>
 </main>
 

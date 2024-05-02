@@ -3,12 +3,14 @@ package com.example.recommender.controllers;
 import com.example.recommender.repositories.RadioStationRepository;
 import com.example.recommender.repositories.RadioStationSeedRepository;
 import com.example.recommender.repositories.UserRepository;
+import com.example.recommender.spotify.data.SearchResult;
 import com.example.recommender.spotify.data.SpotifyProfile;
 import com.example.recommender.spotify.logic.SpotifyClient;
 import com.example.recommender.beans.Album;
 import com.example.recommender.beans.Artist;
 import com.example.recommender.beans.Track;
 //import com.example.recommender.repositories.UserRepository;
+import com.example.recommender.spotify.logic.SpotifyHelper;
 import com.example.recommender.tables.RadioStation;
 import com.example.recommender.tables.User;
 import org.slf4j.Logger;
@@ -23,9 +25,11 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 
-@SessionAttributes({"client", "results", "currentUser"})
+@SessionAttributes({"client", "results", "currentUser", "startRadioWizard", "stationName"})
 @Controller
 public class WebController {
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
@@ -107,6 +111,12 @@ public class WebController {
     }
 
 
+    @GetMapping("/home")
+    public String home(Model model) {
+        model.addAttribute("radioStations", new ArrayList<>());
+        return "home";
+    }
+
     @GetMapping("/index")
     public String index(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
         model.addAttribute("name", name);
@@ -155,6 +165,9 @@ public class WebController {
     public String viewRadioStation(@PathVariable(name="id") String trackid, Model model){
         model.addAttribute("trackid", trackid);
 
+        if(model.getAttribute("client") instanceof SpotifyClient client){
+            model.addAttribute("recommendations", client.getRecommendations(trackid).getTracks());
+        }
         return "radio";
     }
 
@@ -184,6 +197,90 @@ public class WebController {
     @PostMapping("/testSubmit")
     public RedirectView postInfo(@RequestParam(name = "OurInput", required = false, defaultValue = "") String ourInput) {
         return new RedirectView("/test?input=" + ourInput);
+    }
+
+
+    //creating stations
+    @PostMapping("/startCreateStation")
+    public String startCreateStation(Model model) {
+        model.addAttribute("startRadioWizard", true);
+        return "createStation";
+    }
+
+    @PostMapping("/selectStationSeed")
+    public RedirectView selectStationName(@RequestParam(name="stationName") String stationName, Model model) {
+        if(!model.containsAttribute("startRadioWizard"))
+            return new RedirectView("/home");
+
+        model.addAttribute("stationName", stationName);
+        return new RedirectView("/search");
+    }
+
+    @PostMapping("/createStation")
+    public RedirectView createStation(Model model) {
+        if(!model.containsAttribute("startRadioWizard")) return new RedirectView("/home");
+
+        return new RedirectView("/search");
+    }
+
+
+
+    //Search
+    @GetMapping("/search")
+    public String getSearch(@RequestParam(name="trackid", required=false, defaultValue="") String trackid, Model model) throws IOException, URISyntaxException, InterruptedException {
+        if(!model.containsAttribute("stationName"))
+            model.addAttribute("stationName", "");
+
+        return "search";
+    }
+
+    @PostMapping("/search")
+    public String postSearch(@RequestParam(name="query", required=true, defaultValue="") String query,
+                             @RequestParam(name="types", required=true, defaultValue="") String types,
+                             Model model) throws IOException, URISyntaxException, InterruptedException {
+        if(model.getAttribute("client") instanceof SpotifyClient client){
+            SearchResult results = client.searchApiForTrack(query);
+
+            model.addAttribute("results", results);
+            model.addAttribute("currentPage", SpotifyHelper.getCurrentPage(results.getTracks()));
+            model.addAttribute("totalPages", SpotifyHelper.getTotalPages(results.getTracks()));
+            model.addAttribute("query", query);
+        }
+
+
+        return "results";
+    }
+
+    @GetMapping("/search/next")
+    public String getNext(Model model) throws IOException, URISyntaxException, InterruptedException {
+        SpotifyClient client = (SpotifyClient)model.getAttribute("client");
+        SearchResult oldResults = (SearchResult)model.getAttribute("results");
+
+        if(oldResults != null && oldResults.getTracks().getNext() != null){
+            SearchResult results = client.getNextTracksFromResult(oldResults.getTracks());
+            model.addAttribute("results", results);
+
+            model.addAttribute("currentPage", SpotifyHelper.getCurrentPage(results.getTracks()));
+            model.addAttribute("totalPages", SpotifyHelper.getTotalPages(results.getTracks()));
+        }
+
+        return "results";
+    }
+
+    @GetMapping("/search/prev")
+    public String getPrev(Model model) throws IOException, URISyntaxException, InterruptedException {
+        SpotifyClient client = (SpotifyClient)model.getAttribute("client");
+        SearchResult oldResults = (SearchResult)model.getAttribute("results");
+
+        if(oldResults != null && oldResults.getTracks().getPrevious() != null){
+            SearchResult results = client.getPrevTracksFromResult(oldResults.getTracks());
+            model.addAttribute("results", results);
+
+            model.addAttribute("currentPage", SpotifyHelper.getCurrentPage(results.getTracks()));
+            model.addAttribute("totalPages", SpotifyHelper.getTotalPages(results.getTracks()));
+        }
+
+        return "results";
     }
 
     @PostMapping("/getRadioStationDetails")

@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/header :: header}"></head>
+<body>
+
+<nav th:replace="~{fragments/nav :: nav}"></nav>
+
+
+<main class="container">
+    <div class="flexAlign flexCenter">
+        <form action="/selectStationSeed" method="POST" >
+            <input type="text" name="stationName" id="stationName" placeholder="Station Name...">
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

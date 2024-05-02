@@ -11,6 +11,8 @@ public class User {
     private String id;
     private String userName = "";
     private String product = "";
+
+    @Column(name="IMAGE_URL", length = 3000, updatable = true)
     private String imageUrl = "";
     private int imageHeight;
     private int imageWidth;

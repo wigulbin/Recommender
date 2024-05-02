@@ -5,14 +5,18 @@
 
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 
-
-<form action="/selectSeed" method="POST" name="frmSelectTrack" id="frmSelectTrack">
-    <input type="hidden" id="trackid" name="trackid" value="">
-    <input type="hidden" id="stationName" name="stationName" th:value="${stationName}">
-</form>
-
 <main class="container">
-    <div class="flexCenter column">
+    <div th:if="${radioStations.size() == 0}" class="flexAlign flexCenter column">
+        <h1>No Stations Found</h1>
+        <div>
+            <form action="/startCreateStation" method="POST">
+                <button type="submit">Create New</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div th:if="${radioStations.size() > 0}" class="flexCenter column">
         <div class="flexCenter">
             Select a song below to seed your Radio Station
         </div>
