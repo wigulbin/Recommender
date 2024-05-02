@@ -107,7 +107,7 @@ public class WebController {
             model.addAttribute("currentUser", newUser);
 
         }
-        return new RedirectView("/search");
+        return new RedirectView("/home");
     }
 
 
@@ -286,11 +286,11 @@ public class WebController {
     @PostMapping("/getRadioStationDetails")
     public RadioStation getRadioStationDetails(
                                                @RequestParam(name = "stationName", defaultValue = "", required = true) String stationName,
-                                               @RequestParam(name = "trackId", defaultValue = "", required = true) long trackId,
+                                               @RequestParam(name = "trackId", defaultValue = "", required = true) String trackId,
                                                Model model){
         LocalDateTime createdAt = LocalDateTime.now();
 
-        return new RadioStation(stationName, trackId, createdAt, model);
+        return new RadioStation(stationName, Long.parseLong(trackId), createdAt, model);
     }
 }
 

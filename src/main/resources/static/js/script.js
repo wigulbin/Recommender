@@ -3,6 +3,7 @@ function search(query){
         .then(res => res.text())
         .then(text => {
             document.getElementById("searchResults").innerHTML = text;
+            console.log(document.getElementById("searchResults").innerHTML);
             [...document.getElementsByClassName("selectableRow")].forEach(element => element.onclick=selectableOnClick)
         })
 }
@@ -29,7 +30,7 @@ window.onload = () => {
 
 function selectableOnClick(e){
     const element = e.currentTarget;
-    const input = document.getElementById("trackid");
+    const input = document.getElementById("trackId");
     if(input){
         input.value = element.id;
         document.getElementById("frmSelectTrack").submit();

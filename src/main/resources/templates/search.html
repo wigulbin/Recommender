@@ -6,8 +6,8 @@
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 
 
-<form action="/selectSeed" method="POST" name="frmSelectTrack" id="frmSelectTrack">
-    <input type="hidden" id="trackid" name="trackid" value="">
+<form action="/getRadioStationDetails" method="POST" name="frmSelectTrack" id="frmSelectTrack">
+    <input type="hidden" id="trackId" name="trackId" value="">
     <input type="hidden" id="stationName" name="stationName" th:value="${stationName}">
 </form>
 
